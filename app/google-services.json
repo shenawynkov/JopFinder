@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "870665831520",
+    "firebase_url": "https://jop-finder.firebaseio.com",
+    "project_id": "jop-finder",
+    "storage_bucket": "jop-finder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870665831520:android:4607611e0de7eaba",
+        "android_client_info": {
+          "package_name": "com.example.shenawynkov.jopfinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870665831520-vr65hb4f4ru27efgrs31ceftpm37epp2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shenawynkov.jopfinder",
+            "certificate_hash": "16e5bacb769f6d181d77d10d739a1f56cd2b6958"
+          }
+        },
+        {
+          "client_id": "870665831520-sfbt0jq7188acc720jkqte92urb57p71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_odHGrC4--8Gw2ojMjQxkHdgumafzDLQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870665831520-sfbt0jq7188acc720jkqte92urb57p71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

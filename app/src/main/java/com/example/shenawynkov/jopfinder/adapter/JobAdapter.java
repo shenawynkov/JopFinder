@@ -1,0 +1,90 @@
+package com.example.shenawynkov.jopfinder.adapter;
+
+import android.support.v7.widget.ListPopupWindow;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.shenawynkov.jopfinder.R;
+import com.example.shenawynkov.jopfinder.model.Job;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+
+/**
+ * Created by Shenawynkov on 8/24/2017.
+ */
+
+public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
+
+    private List<Job> mJobList=new ArrayList();
+
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public TextView mTitle;
+        public TextView mMinSalary;
+        public TextView mMaxSalary;
+        public TextView mCareer;
+        public TextView mDescription;
+        public ViewHolder(View v) {
+            super(v);
+            mCareer=(TextView)v.findViewById(R.id.job_carear_level);
+            mDescription=(TextView)v.findViewById(R.id.job_description);
+            mMaxSalary=(TextView)v.findViewById(R.id.job_max_salary);
+            mMinSalary=(TextView)v.findViewById(R.id.job_min_salary);
+            mTitle=(TextView)v.findViewById(R.id.job_title);
+
+        }
+    }
+
+
+
+    // Create new views (invoked by the layout manager)
+    @Override
+    public JobAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                   int viewType) {
+        // create a new view
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.job_item, parent, false);
+        // set the view's size, margins, paddings and layout parameters
+
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // - get element from your dataset at this position
+        // - replace the contents of the view with that element
+           holder.mTitle.setText(mJobList.get(position).getTitle());
+
+        holder.mMaxSalary.setText(mJobList.get(position).getSalary_max()+"");
+        holder.mMinSalary.setText(mJobList.get(position).getSalary_min()+"");
+        holder.mCareer.setText(mJobList.get(position).getCareer_level());
+        holder.mDescription.setText(mJobList.get(position).getDescription());
+
+
+    }
+
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return mJobList.size();
+    }
+    public void addJob(Job job)
+    {
+        mJobList.add(job);
+        notifyDataSetChanged();
+    }
+}
+
+
