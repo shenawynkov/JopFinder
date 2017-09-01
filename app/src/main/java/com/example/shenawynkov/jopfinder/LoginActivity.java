@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
     private Button mSignInBtn;
@@ -41,10 +41,13 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordEditText=findViewById(R.id.password);
         mSignInBtn=(Button)findViewById(R.id.sign_in_btn);
          mSignUpBtn=(Button)findViewById(R.id.sign_up);
+
         mSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn(mEmailEditText.getText().toString(),mPasswordEditText.getText().toString());
+
+
 
 
             }
@@ -58,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
@@ -66,6 +68,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser!=null) {
+            showProgressDialog();
+
+            updateUI(currentUser);
+        }
+        else{
+                hideProgressDialog();
+
+        }
 
 
     }
@@ -73,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void signIn(String email, String password) {
 
+        showProgressDialog();
 
         // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
@@ -81,40 +93,50 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            final FirebaseUser user = mAuth.getCurrentUser();
-                           mReference= mReference.child("users").child(user.getUid());
-                            mReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    User user1= dataSnapshot.getValue(User.class);
-                                   if(user1.type==0)
-                                   {
-                                       Intent  intent=new Intent(LoginActivity.this,NewJopActivity.class);
-                                      startActivity(intent);
-                                   }
-                                    else
-                                   {
-                                      // Intent  intent=new Intent(LoginActivity.this,selection.class);
-
-                                   }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
+                             FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
 
                         } else {
                             // If sign in fails, display a message to the user.
+                            hideProgressDialog();
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+
                         }
 
 
                     }
                 });
         // [END sign_in_with_email]
+    }
+    void updateUI(FirebaseUser user)
+    {
+        if(user!=null) {
+            mReference = mReference.child("users").child(user.getUid());
+            mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user1 = dataSnapshot.getValue(User.class);
+                    if (user1 != null) {
+                        if (user1.type == 0) {
+                            Intent intent = new Intent(LoginActivity.this, NewJopActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+
+                            startActivity(intent);
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
 
 }

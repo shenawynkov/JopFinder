@@ -1,5 +1,6 @@
 package com.example.shenawynkov.jopfinder;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,8 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignUpActivity extends AppCompatActivity {
     private EditText mEmailEditText;
@@ -51,20 +55,22 @@ public class SignUpActivity extends AppCompatActivity {
         mNameEditText=(EditText)findViewById(R.id.name);
         mSignUpBtn=(Button)findViewById(R.id.sign_up_btn);
         mPhoneEditText=(EditText) findViewById(R.id.phone);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                type=i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         mSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        type=i;
-                    }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
                 createAccount(mNameEditText.getText().toString(),
                         mEmailEditText.getText().toString(),
                         mPasswordEditText.getText().toString(),
@@ -85,6 +91,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 writeNewUser(user.getUid(),name,email,phone,type);
+                                 updateUI(user);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(SignUpActivity.this, "Authentication failed.",
@@ -106,4 +113,33 @@ public class SignUpActivity extends AppCompatActivity {
 
         mReference.child("users").child(userId).setValue(user);
     }
+    void updateUI(FirebaseUser user)
+    {
+        if(user!=null) {
+            mReference = mReference.child("users").child(user.getUid());
+            mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user1 = dataSnapshot.getValue(User.class);
+                    if (user1 != null) {
+                        if (user1.type == 0) {
+                            Intent intent = new Intent(SignUpActivity.this, NewJopActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
+                            startActivity(intent);
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+    }
+
 }

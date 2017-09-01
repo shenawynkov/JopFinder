@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 import com.example.shenawynkov.jopfinder.adapter.JobAdapter;
 import com.example.shenawynkov.jopfinder.model.Job;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,11 +34,12 @@ public class NavigationActivity extends AppCompatActivity
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     private ChildEventListener mChildEventListener;
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
+  mAuth=FirebaseAuth.getInstance();
         mRecyclerView = (RecyclerView) findViewById(R.id.jobs_recycler_view);
 
         // use this setting to improve performance if you know that changes
@@ -168,12 +170,14 @@ public class NavigationActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_signout) {
-        Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
-        intent.putExtra("signout",1);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+           mAuth.signOut();
+        Intent intent = new Intent(NavigationActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         startActivity(intent);
 
-        } else if (id == R.id.nav_share) {
+
+    } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
