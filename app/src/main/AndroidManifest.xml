@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUpActivity"
-                  android:noHistory="true">
+                 >
         </activity>
     </application>
 

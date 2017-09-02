@@ -132,6 +132,7 @@ public class LoginActivity extends BaseActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
+                    hideProgressDialog();
 
                 }
             });
