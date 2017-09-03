@@ -177,6 +177,7 @@ public class SignUpActivity extends BaseActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
+                            intent.putExtra(getString(R.string.user_extra),user1);
                             startActivity(intent);
 
                         }

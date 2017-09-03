@@ -123,7 +123,7 @@ public class LoginActivity extends BaseActivity {
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
-
+                            intent.putExtra(getString(R.string.user_extra),user1);
                             startActivity(intent);
 
                         }

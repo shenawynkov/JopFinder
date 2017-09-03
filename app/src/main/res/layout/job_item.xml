@@ -41,5 +41,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/job_description"
         android:textSize="12sp"/>
+    <Button
+        android:id="@+id/apply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apply"
+        android:textSize="16dp"/>
 </LinearLayout>
 </android.support.v7.widget.CardView>

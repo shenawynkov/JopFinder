@@ -4,12 +4,15 @@ import android.net.Uri;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by Shenawynkov on 8/25/2017.
  */
 
 @IgnoreExtraProperties
-public class User {
+
+public class User implements Serializable {
    final    public static int Empolyee=1;
     final    public static int Empolyer=0;
 
@@ -28,6 +31,7 @@ public class User {
         this.email = email;
         this.phone=phone;
         this.type=type;
+        if(cv!=null)
         this.cv=cv.toString();
     }
 

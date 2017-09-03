@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 import com.example.shenawynkov.jopfinder.adapter.JobAdapter;
 import com.example.shenawynkov.jopfinder.model.Job;
+import com.example.shenawynkov.jopfinder.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -35,10 +36,12 @@ public class NavigationActivity extends AppCompatActivity
     private DatabaseReference mReference;
     private ChildEventListener mChildEventListener;
     private FirebaseAuth mAuth;
+    private User mUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        mUser=(User)getIntent().getSerializableExtra(getString(R.string.user_extra));
   mAuth=FirebaseAuth.getInstance();
         mRecyclerView = (RecyclerView) findViewById(R.id.jobs_recycler_view);
 
@@ -51,7 +54,7 @@ public class NavigationActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mJobAdapter = new JobAdapter();
+        mJobAdapter = new JobAdapter(mUser);
         mRecyclerView.setAdapter(mJobAdapter);
        mDatabase=FirebaseDatabase.getInstance();
         mReference=mDatabase.getReference("job");
