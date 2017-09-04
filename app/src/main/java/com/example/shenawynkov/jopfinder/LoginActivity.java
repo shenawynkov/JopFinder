@@ -20,21 +20,41 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
+
+import java.util.List;
+
+import static android.R.attr.type;
 
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements Validator.ValidationListener {
+
+    @NotEmpty
+    @Email
     private EditText mEmailEditText;
-    private EditText mPasswordEditText;
+   // @Password(min = 6, scheme = Password.Scheme.ALPHA_NUMERIC_MIXED_CASE_SYMBOLS)
+   @Password(min = 6)
+   private EditText mPasswordEditText;
     private Button mSignInBtn;
     private Button mSignUpBtn;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
+    private Validator mValidator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mValidator = new Validator(this);
+        mValidator.setValidationListener(this);
+
+
         mAuth = FirebaseAuth.getInstance();
   mReference=FirebaseDatabase.getInstance().getReference();
         mEmailEditText=findViewById(R.id.email_sign_up);
@@ -45,7 +65,7 @@ public class LoginActivity extends BaseActivity {
         mSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn(mEmailEditText.getText().toString(),mPasswordEditText.getText().toString());
+                mValidator.validate();
 
 
 
@@ -60,7 +80,8 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
-
+        mValidator = new Validator(this);
+        mValidator.setValidationListener(this);
     }
 
 
@@ -120,6 +141,8 @@ public class LoginActivity extends BaseActivity {
                     if (user1 != null) {
                         if (user1.type == 0) {
                             Intent intent = new Intent(LoginActivity.this, NewJopActivity.class);
+                            intent.putExtra(getString(R.string.user_extra),user1);
+
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
@@ -138,6 +161,33 @@ public class LoginActivity extends BaseActivity {
             });
         }
 
+    }
+
+
+
+
+
+
+    @Override
+    public void onValidationSucceeded() {
+        signIn(mEmailEditText.getText().toString(),mPasswordEditText.getText().toString());
+
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        hideProgressDialog();
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            // Display error messages ;)
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
 }

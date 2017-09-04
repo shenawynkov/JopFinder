@@ -37,5 +37,6 @@ dependencies {
     compile project(':activation')
     compile project(':additionnal')
     compile project(':mail')
+    compile 'com.mobsandgeeks:android-saripaar:2.0.3'
 }
 apply plugin: 'com.google.gms.google-services'

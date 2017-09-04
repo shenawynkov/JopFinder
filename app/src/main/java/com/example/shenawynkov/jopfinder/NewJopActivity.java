@@ -1,5 +1,6 @@
 package com.example.shenawynkov.jopfinder;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.shenawynkov.jopfinder.model.Job;
+import com.example.shenawynkov.jopfinder.model.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -29,7 +31,7 @@ private EditText mEditTextTitle;
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference myRef ;
-
+  private User mUser;
 
 
 
@@ -38,6 +40,9 @@ private EditText mEditTextTitle;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_jop);
+
+        mUser=(User)getIntent().getSerializableExtra(getString(R.string.user_extra));
+
         mEditTextTitle=(EditText)findViewById(R.id.newjop_title);
         mEditTextMinSalary=(EditText)findViewById(R.id.newjop_min_salary);
         mEditTextMaxSalary=(EditText)findViewById(R.id.newjop_max_salary);
@@ -65,8 +70,10 @@ private EditText mEditTextTitle;
                 mDatabase= FirebaseDatabase.getInstance();
 
                 DatabaseReference myRef = mDatabase.getReference("job");
-                Job job=new Job(mTitle,mMinSalary,mMaxSalary,mcareer,mDescription);
+                Job job=new Job(mTitle,mMinSalary,mMaxSalary,mcareer,mDescription,mUser.email);
                 myRef.push().setValue(job);
+                Intent  intent=new Intent(NewJopActivity.this,NavigationActivity.class);
+                startActivity(intent);
 
             }
         });

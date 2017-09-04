@@ -10,18 +10,27 @@ public class Job {
     private int  salary_max;
     private String career_level;
     private String description;
-
+  private String employeer_mail;
 
     Job()
 {
 
 }
-    public Job(String title, int salary_min, int salary_max, String career_level, String description) {
+    public Job(String title, int salary_min, int salary_max, String career_level, String description,String employeer_mail) {
         this.title = title;
         this.salary_min = salary_min;
         this.salary_max = salary_max;
         this.career_level = career_level;
         this.description = description;
+        this.employeer_mail=employeer_mail;
+    }
+
+    public String getEmployeer_mail() {
+        return employeer_mail;
+    }
+
+    public void setEmployeer_mail(String employeer_mail) {
+        this.employeer_mail = employeer_mail;
     }
 
     public String getTitle() {
