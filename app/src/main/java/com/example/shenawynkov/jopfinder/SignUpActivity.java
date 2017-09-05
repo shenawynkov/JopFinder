@@ -31,23 +31,35 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
 
-public class SignUpActivity extends BaseActivity {
+import java.util.List;
+
+public class SignUpActivity extends BaseActivity implements Validator.ValidationListener {
     private static final int READ_REQUEST_CODE = 42;
-
+    @NotEmpty
+    @Email
     private EditText mEmailEditText;
+    @Password(min = 6)
     private EditText mPasswordEditText;
+    @NotEmpty
     private EditText mNameEditText;
     private Button mSignUpBtn;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
+    @NotEmpty
     private EditText mPhoneEditText;
     private Button mAddCv;
     private int type;
       private  UploadTask mUploadTask;
       private FirebaseStorage mStorage;
      private StorageReference mStorageRef;
+    private Validator mValidator;
 
      private Uri mCvLink;
 
@@ -55,6 +67,10 @@ public class SignUpActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        mValidator = new Validator(this);
+        mValidator.setValidationListener(this);
+
+
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_signup);
 // Create an ArrayAdapter using the string array and a default spinner layout
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -94,29 +110,9 @@ public class SignUpActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 showProgressDialog();
-                if(type==1)
-                {
-                    if(mCvLink!=null)
-                    {createAccount(mNameEditText.getText().toString(),
-                            mEmailEditText.getText().toString(),
-                            mPasswordEditText.getText().toString(),
-                            mPhoneEditText.getText().toString(),type,mCvLink);
+                mValidator.validate();
 
-                    }
-                    else
-                    {
-                        hideProgressDialog();
-                        Toast.makeText(getApplicationContext(),"You must upload Your Cv",Toast.LENGTH_SHORT).show();
 
-                    }
-
-                }
-                    else {
-                    createAccount(mNameEditText.getText().toString(),
-                            mEmailEditText.getText().toString(),
-                            mPasswordEditText.getText().toString(),
-                            mPhoneEditText.getText().toString(), type,null);
-                }
             }
         });
         mAddCv.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +125,6 @@ public class SignUpActivity extends BaseActivity {
 
     }
     private void createAccount(final String name, final String email, String password, final String phone, final int type,final Uri cv) {
-        if (!(name.isEmpty()||email.isEmpty() || password.isEmpty() || phone.isEmpty())) {
 
             // [START create_user_with_email]
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -150,12 +145,8 @@ public class SignUpActivity extends BaseActivity {
 
                         }
                     });
-        }
-        else
-        {
-            Toast.makeText(SignUpActivity.this, "enter correct data",
-                    Toast.LENGTH_SHORT).show();
-        }
+
+
     }
     private void writeNewUser(String userId, String name, String email,String phone,int type,Uri cv) {
         User user = new User(name, email,phone,type,cv);
@@ -252,5 +243,49 @@ public class SignUpActivity extends BaseActivity {
             }
         });
         hideProgressDialog();
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        Toast.makeText(this, "Yay! we got it right!", Toast.LENGTH_SHORT).show();
+        if(type==1)
+        {
+            if(mCvLink!=null)
+            {createAccount(mNameEditText.getText().toString(),
+                    mEmailEditText.getText().toString(),
+                    mPasswordEditText.getText().toString(),
+                    mPhoneEditText.getText().toString(),type,mCvLink);
+
+            }
+            else
+            {
+                hideProgressDialog();
+                Toast.makeText(getApplicationContext(),"You must upload Your Cv",Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+        else {
+            createAccount(mNameEditText.getText().toString(),
+                    mEmailEditText.getText().toString(),
+                    mPasswordEditText.getText().toString(),
+                    mPhoneEditText.getText().toString(), type,null);
+        }
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        hideProgressDialog();
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            // Display error messages ;)
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
