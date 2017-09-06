@@ -30,6 +30,10 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
     private List<Job> mJobList=new ArrayList();
     private User mUser;
 
+    public JobAdapter()
+    {
+        mUser=null;
+    }
    public JobAdapter(User user)
     {
         mUser=user;
@@ -73,7 +77,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
            holder.mTitle.setText(mJobList.get(position).getTitle());
@@ -82,6 +86,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
         holder.mMinSalary.setText(mJobList.get(position).getSalary_min()+"");
         holder.mCareer.setText(mJobList.get(position).getCareer_level());
         holder.mDescription.setText(mJobList.get(position).getDescription());
+        if(mUser!=null){
         holder.mApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,11 +95,15 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
                      "My name is : " +mUser.username+" \n"+
                       "And here my CV : \n"+       mUser.cv,
                      mUser.email,
-                     "shenawynkov@gmail.com"
+                     mJobList.get(position).getEmployeer_mail()
              });
 
             }
-        });
+        });}
+        else
+        {
+            holder.mApply.setVisibility(View.GONE);
+        }
 
             }
 

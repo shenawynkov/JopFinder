@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -67,6 +68,9 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
 
@@ -167,7 +171,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
                             Intent intent = new Intent(SignUpActivity.this, NewJopActivity.class);
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, JopListActivity.class);
                             intent.putExtra(getString(R.string.user_extra),user1);
                             startActivity(intent);
 

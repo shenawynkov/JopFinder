@@ -3,6 +3,10 @@ package com.example.shenawynkov.jopfinder;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +16,7 @@ import android.widget.Spinner;
 
 import com.example.shenawynkov.jopfinder.model.Job;
 import com.example.shenawynkov.jopfinder.model.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -40,6 +45,9 @@ private EditText mEditTextTitle;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_jop);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         mUser=(User)getIntent().getSerializableExtra(getString(R.string.user_extra));
 
@@ -72,7 +80,7 @@ private EditText mEditTextTitle;
                 DatabaseReference myRef = mDatabase.getReference("job");
                 Job job=new Job(mTitle,mMinSalary,mMaxSalary,mcareer,mDescription,mUser.email);
                 myRef.push().setValue(job);
-                Intent  intent=new Intent(NewJopActivity.this,NavigationActivity.class);
+                Intent  intent=new Intent(NewJopActivity.this,EmpolyerJopListActivity.class);
                 startActivity(intent);
 
             }
@@ -89,5 +97,32 @@ private EditText mEditTextTitle;
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         mcareer= (String) adapterView.getItemAtPosition(0);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                FirebaseAuth.getInstance().signOut();
+                Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.new_jop_menu, menu);
+        return true;
     }
 }
