@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -67,6 +66,9 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
 
@@ -99,6 +101,8 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
                 {
                     mAddCv.setVisibility(View.VISIBLE);
                 }
+                else
+                    mAddCv.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -119,7 +123,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
             @Override
             public void onClick(View view) {
                 performFileSearch();
-                showProgressDialog();
+
             }
         });
 
@@ -164,10 +168,10 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
                     User user1 = dataSnapshot.getValue(User.class);
                     if (user1 != null) {
                         if (user1.type == 0) {
-                            Intent intent = new Intent(SignUpActivity.this, NewJopActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, NewJopFragment.class);
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, JopListActivity.class);
                             intent.putExtra(getString(R.string.user_extra),user1);
                             startActivity(intent);
 
@@ -200,6 +204,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         intent.setType("application/pdf");
 
         startActivityForResult(intent, READ_REQUEST_CODE);
+
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode,
@@ -224,6 +229,8 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
     }
     void  uploadFile(Uri file)
     {
+        showProgressDialog("Uploading Cv");
+
 
         StorageReference riversRef = mStorageRef.child("CVs/"+file.getLastPathSegment());
         mUploadTask = riversRef.putFile(file);
@@ -240,9 +247,10 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 mCvLink=downloadUrl;
+                hideProgressDialog();
             }
         });
-        hideProgressDialog();
+
     }
 
     @Override

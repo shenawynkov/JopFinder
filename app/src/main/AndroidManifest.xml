@@ -14,14 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".NewJopFragment">
+        </activity>
         <activity
-            android:name=".NavigationActivity"
-            android:label="@string/title_activity_navigation"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".NewJopActivity">
-        </activity>
-        <activity android:name=".LoginActivity"
+            android:name=".LoginActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -29,8 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity"
-                 >
+        <activity android:name=".SignUpActivity">
+        </activity>
+        <activity android:name=".JopListActivity">
+        </activity>
+        <activity android:name=".EmpolyerJopListFragment">
+        </activity>
+        <activity android:name=".EmployerActivity">
         </activity>
     </application>
 
