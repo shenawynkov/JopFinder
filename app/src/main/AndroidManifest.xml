@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NewJopActivity">
+        <activity android:name=".NewJopFragment">
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -29,7 +29,9 @@
         </activity>
         <activity android:name=".JopListActivity">
         </activity>
-        <activity android:name=".EmpolyerJopListActivity">
+        <activity android:name=".EmpolyerJopListFragment">
+        </activity>
+        <activity android:name=".EmployerActivity">
         </activity>
     </application>
 

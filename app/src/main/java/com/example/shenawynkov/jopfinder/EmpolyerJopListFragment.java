@@ -1,14 +1,13 @@
 package com.example.shenawynkov.jopfinder;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.shenawynkov.jopfinder.adapter.JobAdapter;
 import com.example.shenawynkov.jopfinder.model.Job;
@@ -20,7 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class EmpolyerJopListActivity extends AppCompatActivity {
+public class EmpolyerJopListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private JobAdapter mJobAdapter;
@@ -29,23 +28,22 @@ public class EmpolyerJopListActivity extends AppCompatActivity {
     private ChildEventListener mChildEventListener;
     private FirebaseAuth mAuth;
     private User mUser;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v=inflater.inflate(R.layout.employer_jop_list, container, false);
 
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_jop_list);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.jobs_recycler_view);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.jobs_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
@@ -56,10 +54,13 @@ public class EmpolyerJopListActivity extends AppCompatActivity {
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
                 Job job = dataSnapshot.getValue(Job.class);
-                if(job.getEmployeer_mail()==FirebaseAuth.getInstance().getCurrentUser().getEmail())
+
+                if(job.getEmployeer_mail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()) )
                 {
                     mJobAdapter.addJob(job);
+
 
                 }
             }
@@ -87,37 +88,12 @@ public class EmpolyerJopListActivity extends AppCompatActivity {
 
         mReference.addChildEventListener(mChildEventListener);
 
+        return v;
     }
 
 
-        @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                FirebaseAuth.getInstance().signOut();
-                Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
 
 
 
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.new_jop_menu, menu);
-        return true;
-    }
 
 }

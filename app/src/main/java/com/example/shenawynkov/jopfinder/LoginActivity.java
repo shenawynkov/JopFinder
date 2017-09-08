@@ -2,7 +2,6 @@ package com.example.shenawynkov.jopfinder;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -28,8 +27,6 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 
 import java.util.List;
-
-import static android.R.attr.type;
 
 
 public class LoginActivity extends BaseActivity implements Validator.ValidationListener {
@@ -142,7 +139,7 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     User user1 = dataSnapshot.getValue(User.class);
                     if (user1 != null) {
                         if (user1.type == 0) {
-                            Intent intent = new Intent(LoginActivity.this, NewJopActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, EmployerActivity.class);
                             intent.putExtra(getString(R.string.user_extra),user1);
 
                             startActivity(intent);
