@@ -48,15 +48,14 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
+
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
 
 
         mAuth = FirebaseAuth.getInstance();
   mReference=FirebaseDatabase.getInstance().getReference();
-        mEmailEditText=findViewById(R.id.email_sign_up);
+        mEmailEditText=findViewById(R.id.email_sign_in);
         mPasswordEditText=findViewById(R.id.password);
         mSignInBtn=(Button)findViewById(R.id.sign_in_btn);
          mSignUpBtn=(Button)findViewById(R.id.sign_up);
