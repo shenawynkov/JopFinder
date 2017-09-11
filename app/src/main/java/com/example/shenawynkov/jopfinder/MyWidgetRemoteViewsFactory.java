@@ -14,7 +14,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +74,12 @@ public class MyWidgetRemoteViewsFactory  implements RemoteViewsService.RemoteVie
     @Override
     public void onDataSetChanged() {
 
+        SharedPreferences sharedPref = mContext.getSharedPreferences(
+                "pref", Context.MODE_PRIVATE);
+        String string;
+        string = sharedPref.getString("key", "");
+        Type type = new TypeToken<ArrayList<Job>>() {}.getType();
+       mJobs = new Gson().fromJson(string, type);
 
 
     }

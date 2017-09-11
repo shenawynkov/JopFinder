@@ -1,7 +1,9 @@
 package com.example.shenawynkov.jopfinder;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import com.example.shenawynkov.jopfinder.model.Job;
 import com.example.shenawynkov.jopfinder.model.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.DecimalMax;
@@ -137,6 +140,12 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
         DatabaseReference myRef = mDatabase.getReference("job");
         Job job=new Job(mTitle,mMinSalary,mMaxSalary,mcareer,mDescription,mUser.email);
         myRef.push().setValue(job);
+        Gson gson = new Gson();
+        String string = gson.toJson(job);
+        SharedPreferences sharedPref =getActivity(). getSharedPreferences(
+                "pref" , Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("key", string);
 //                Intent  intent=new Intent(getActivity(),EmpolyerJopListFragment.class);
 //                startActivity(intent);
         mPagerListner.ChangePager();
@@ -163,4 +172,5 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
     interface ChangePagerListner{
         void ChangePager();
     }
+
 }
