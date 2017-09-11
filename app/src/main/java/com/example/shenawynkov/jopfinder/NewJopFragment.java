@@ -1,7 +1,9 @@
 package com.example.shenawynkov.jopfinder;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import com.example.shenawynkov.jopfinder.model.Job;
 import com.example.shenawynkov.jopfinder.model.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.DecimalMax;
@@ -77,9 +80,9 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
         Spinner spinner = (Spinner) v.findViewById(R.id.newjop_spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.career_array, android.R.layout.simple_spinner_item);
+                R.array.career_array, R.layout.spinner_item);
 // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
@@ -134,9 +137,12 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
 
         mDatabase= FirebaseDatabase.getInstance();
 
+
         DatabaseReference myRef = mDatabase.getReference("job");
+        myRef.keepSynced(true);
         Job job=new Job(mTitle,mMinSalary,mMaxSalary,mcareer,mDescription,mUser.email);
         myRef.push().setValue(job);
+
 //                Intent  intent=new Intent(getActivity(),EmpolyerJopListFragment.class);
 //                startActivity(intent);
         mPagerListner.ChangePager();

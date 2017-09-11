@@ -9,13 +9,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <EditText
         android:id="@+id/newjop_title"
+        style="@style/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
         android:hint="title"
-  />
+            android:textColorHint="@color/white"
+        />
     <EditText
+        style="@style/text"
+
         android:id="@+id/newjop_min_salary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,15 +27,20 @@
         android:layout_marginLeft="8dp"
         android:hint="min salary"
         android:inputType="number"
+        android:textColorHint="@color/white"
+
 
         />
     <EditText
+        style="@style/text"
+
         android:id="@+id/newjop_max_salary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
         android:hint="max salary"
+        android:textColorHint="@color/white"
         android:inputType="number"
 
         />
@@ -41,6 +50,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
     <TextView
+        style="@style/text"
         android:gravity="center"
         android:id="@+id/textView3"
         android:layout_width="0dp"
@@ -49,17 +59,23 @@
         android:text="Carear Level"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
-        android:textSize="16sp"
         />
     <Spinner
         android:id="@+id/newjop_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
+        android:popupBackground="@color/white"
+
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"/>
 </LinearLayout>
     <EditText
+        android:textColorHint="@color/white"
+
+        android:textColor="@color/white"
+        android:textStyle="italic"
+
         android:id="@+id/newjop_description"
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -70,10 +86,11 @@
 
 
     <Button
+        style="@style/text"
+       android:background="@color/colorAccent"
         android:id="@+id/newjop_add_job"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_width="215dp"
+        android:layout_height="40dp"
         android:text="@string/add_job"
         android:hint="Add Jop"
 
