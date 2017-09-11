@@ -66,7 +66,6 @@ public class EmpolyerJopListFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Job job = dataSnapshot.getValue(Job.class);
-               Toast.makeText(getContext(),job.getEmployeer_mail()+" "+FirebaseAuth.getInstance().getCurrentUser().getEmail(),Toast.LENGTH_SHORT).show();
                 if(job.getEmployeer_mail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()) )
                 {
                     mJobAdapter.addJob(job);
