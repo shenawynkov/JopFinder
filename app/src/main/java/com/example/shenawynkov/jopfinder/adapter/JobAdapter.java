@@ -97,7 +97,8 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
                      mUser.email,
                      mJobList.get(position).getEmployeer_mail()
              });
-
+           holder.mApply.setText("Applied");
+                holder.mApply.setBackgroundResource(R.color.colorPrimaryDark);
             }
         });}
         else

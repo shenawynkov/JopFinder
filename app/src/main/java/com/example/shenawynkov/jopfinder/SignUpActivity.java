@@ -40,6 +40,8 @@ import com.mobsandgeeks.saripaar.annotation.Password;
 
 import java.util.List;
 
+import static android.R.layout.simple_spinner_dropdown_item;
+
 public class SignUpActivity extends BaseActivity implements Validator.ValidationListener {
     private static final int READ_REQUEST_CODE = 42;
     @NotEmpty
@@ -82,7 +84,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.type_array, R.layout.spinner_item);
 // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         mAuth=FirebaseAuth.getInstance();
@@ -305,7 +307,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case  R.id.home:
+            case  android.R.id.home:
                 Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
