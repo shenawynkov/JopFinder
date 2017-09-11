@@ -51,6 +51,8 @@ public class EmpolyerJopListFragment extends Fragment {
         mRecyclerView.setAdapter(mJobAdapter);
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference("job");
+        mReference.keepSynced(true);
+
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

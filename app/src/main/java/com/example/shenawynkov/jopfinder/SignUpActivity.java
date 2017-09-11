@@ -86,6 +86,8 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         mStorageRef= mStorage.getReference();
 
         mReference = FirebaseDatabase.getInstance().getReference();
+        mReference.keepSynced(true);
+
         mEmailEditText=(EditText)findViewById(R.id.email_sign_up);
         mPasswordEditText=(EditText)findViewById(R.id.password_sign_up);
         mNameEditText=(EditText)findViewById(R.id.name);
@@ -168,7 +170,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
                     User user1 = dataSnapshot.getValue(User.class);
                     if (user1 != null) {
                         if (user1.type == 0) {
-                            Intent intent = new Intent(SignUpActivity.this, NewJopFragment.class);
+                            Intent intent = new Intent(SignUpActivity.this, EmployerActivity.class);
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(SignUpActivity.this, JopListActivity.class);

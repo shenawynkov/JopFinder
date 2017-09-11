@@ -133,6 +133,8 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     {
         if(user!=null) {
             mReference = mReference.child("users").child(user.getUid());
+            mReference.keepSynced(true);
+
             mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

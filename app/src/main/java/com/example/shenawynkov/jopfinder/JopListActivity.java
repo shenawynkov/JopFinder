@@ -37,6 +37,7 @@ public class JopListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_jop_list);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
         mUser=(User)getIntent().getSerializableExtra(getString(R.string.user_extra));
         mAuth=FirebaseAuth.getInstance();
         mRecyclerView = (RecyclerView) findViewById(R.id.jobs_recycler_view);
@@ -54,6 +55,7 @@ public class JopListActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mJobAdapter);
         mDatabase= FirebaseDatabase.getInstance();
         mReference=mDatabase.getReference("job");
+        mReference.keepSynced(true);
         mChildEventListener=new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
