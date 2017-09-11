@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <android.support.design.widget.AppBarLayout
@@ -17,11 +18,11 @@
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     </android.support.design.widget.AppBarLayout>
 
 
 <LinearLayout
-
     android:layout_marginTop="?actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,7 +32,8 @@
 
     <EditText
         android:layout_marginTop="16dp"
-
+        style="@style/text"
+        android:textColorHint="@color/white"
         android:id="@+id/name"
         android:layout_width="278dp"
         android:layout_height="wrap_content"
@@ -43,7 +45,8 @@
        />
     <EditText
         android:layout_marginTop="8dp"
-
+        style="@style/text"
+       android:textColorHint="@color/white"
         android:id="@+id/email_sign_up"
         android:layout_width="216dp"
         android:layout_height="wrap_content"
@@ -54,7 +57,8 @@
 
     <EditText
         android:layout_marginTop="8dp"
-
+        style="@style/text"
+        android:textColorHint="@color/white"
         android:id="@+id/password_sign_up"
         android:layout_width="215dp"
         android:layout_height="wrap_content"
@@ -67,6 +71,8 @@
 
     <EditText
         android:layout_marginTop="8dp"
+        style="@style/text"
+        android:textColorHint="@color/white"
 
         android:id="@+id/phone"
         android:layout_width="215dp"
@@ -83,7 +89,7 @@
 
         android:id="@+id/spinner_signup"
         android:layout_width="215dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
 
         />
@@ -91,10 +97,11 @@
 
     <Button
         android:layout_marginTop="8dp"
-
+       android:background="@color/colorAccent"
+        style="@style/text"
         android:id="@+id/upload_file"
-        android:layout_width="117dp"
-        android:layout_height="50dp"
+        android:layout_width="215dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:visibility="invisible"
         android:text="Upload Cv"
@@ -102,9 +109,11 @@
 
     <Button
         android:layout_marginTop="16dp"
+        android:background="@color/colorAccent"
+        style="@style/text"
         android:id="@+id/sign_up_btn"
-        android:layout_width="117dp"
-        android:layout_height="50dp"
+        android:layout_width="215dp"
+        android:layout_height="wrap_content"
          android:layout_gravity="center_horizontal"
         android:text="Sign Up"
        />
