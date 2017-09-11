@@ -137,15 +137,12 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
 
         mDatabase= FirebaseDatabase.getInstance();
 
+
         DatabaseReference myRef = mDatabase.getReference("job");
+        myRef.keepSynced(true);
         Job job=new Job(mTitle,mMinSalary,mMaxSalary,mcareer,mDescription,mUser.email);
         myRef.push().setValue(job);
-        Gson gson = new Gson();
-        String string = gson.toJson(job);
-        SharedPreferences sharedPref =getActivity(). getSharedPreferences(
-                "pref" , Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("key", string);
+
 //                Intent  intent=new Intent(getActivity(),EmpolyerJopListFragment.class);
 //                startActivity(intent);
         mPagerListner.ChangePager();
@@ -172,5 +169,4 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
     interface ChangePagerListner{
         void ChangePager();
     }
-
 }
