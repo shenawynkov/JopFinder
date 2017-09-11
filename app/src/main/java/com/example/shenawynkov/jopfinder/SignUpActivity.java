@@ -177,6 +177,8 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
                     if (user1 != null) {
                         if (user1.type == 0) {
                             Intent intent = new Intent(SignUpActivity.this, EmployerActivity.class);
+                            intent.putExtra(getString(R.string.user_extra),user1);
+
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(SignUpActivity.this, JopListActivity.class);
