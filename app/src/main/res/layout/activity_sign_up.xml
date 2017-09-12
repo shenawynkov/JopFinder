@@ -3,13 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/bg"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
@@ -21,104 +23,108 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-<LinearLayout
-    android:layout_marginTop="?actionBarSize"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.shenawynkov.jopfinder.SignUpActivity">
-
-
-    <EditText
-        android:layout_marginTop="16dp"
-        style="@style/text"
-        android:textColorHint="@color/white"
-        android:id="@+id/name"
-        android:layout_width="278dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="textPersonName"
-       />
-    <EditText
-        android:layout_marginTop="8dp"
-        style="@style/text"
-       android:textColorHint="@color/white"
-        android:id="@+id/email_sign_up"
-        android:layout_width="216dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:hint="E-mail"
-        android:inputType="textEmailAddress"
-       />
-
-    <EditText
-        android:layout_marginTop="8dp"
-        style="@style/text"
-        android:textColorHint="@color/white"
-        android:id="@+id/password_sign_up"
-        android:layout_width="215dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        />
-
-    <EditText
-        android:layout_marginTop="8dp"
-        style="@style/text"
-        android:textColorHint="@color/white"
-
-        android:id="@+id/phone"
-        android:layout_width="215dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:orientation="vertical"
+        >
 
 
-        android:ems="10"
-        android:hint="Phone"
-        android:inputType="phone"
-/>
-    <Spinner
-        android:layout_marginTop="8dp"
-        android:popupBackground="@color/white"
-        android:id="@+id/spinner_signup"
-        android:layout_width="215dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        <EditText
+            android:id="@+id/name"
+            style="@style/text"
+            android:layout_width="278dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:ems="10"
 
-        />
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:textColorHint="@color/white"
+            />
+
+        <EditText
+            android:id="@+id/email_sign_up"
+            style="@style/text"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:textColorHint="@color/white"
+            />
+
+        <EditText
+            android:id="@+id/password_sign_up"
+            style="@style/text"
+            android:layout_width="215dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textColorHint="@color/white"
+            />
+
+        <EditText
+            android:id="@+id/phone"
+            style="@style/text"
+            android:layout_width="215dp"
+
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:ems="10"
 
 
-    <Button
-        android:layout_marginTop="8dp"
-       android:background="@color/colorAccent"
-        style="@style/text"
-        android:id="@+id/upload_file"
-        android:layout_width="215dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="invisible"
-        android:text="Upload Cv"
-        />
+            android:hint="@string/phone"
+            android:inputType="phone"
+            android:textColorHint="@color/white"
+            />
 
-    <Button
-        android:layout_marginTop="16dp"
-        android:background="@color/colorAccent"
-        style="@style/text"
-        android:id="@+id/sign_up_btn"
-        android:layout_width="215dp"
-        android:layout_height="wrap_content"
-         android:layout_gravity="center_horizontal"
-        android:text="Sign Up"
-       />
+        <Spinner
+            android:id="@+id/spinner_signup"
+            android:layout_width="215dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:popupBackground="@color/white"
+
+            />
 
 
+        <Button
+            android:id="@+id/upload_file"
+            style="@style/text"
+            android:layout_width="215dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorAccent"
+            android:text="Upload Cv"
+            android:visibility="invisible"
+            />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/sign_up_btn"
+            style="@style/text"
+            android:layout_width="215dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorAccent"
+            android:text="@string/sign_up"
+            />
+
+
+    </LinearLayout>
+</ScrollView>
 </android.support.design.widget.CoordinatorLayout>
