@@ -3,8 +3,8 @@ package com.example.shenawynkov.jopfinder;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,8 +40,6 @@ import com.mobsandgeeks.saripaar.annotation.Password;
 
 import java.util.List;
 
-import static android.R.layout.simple_spinner_dropdown_item;
-
 public class SignUpActivity extends BaseActivity implements Validator.ValidationListener {
     private static final int READ_REQUEST_CODE = 42;
     @NotEmpty
@@ -59,12 +57,12 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
     private EditText mPhoneEditText;
     private Button mAddCv;
     private int type;
-      private  UploadTask mUploadTask;
-      private FirebaseStorage mStorage;
-     private StorageReference mStorageRef;
+    private UploadTask mUploadTask;
+    private FirebaseStorage mStorage;
+    private StorageReference mStorageRef;
     private Validator mValidator;
 
-     private Uri mCvLink;
+    private Uri mCvLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,29 +85,27 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         adapter.setDropDownViewResource(R.layout.spinner_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         mStorage = FirebaseStorage.getInstance();
-        mStorageRef= mStorage.getReference();
+        mStorageRef = mStorage.getReference();
 
         mReference = FirebaseDatabase.getInstance().getReference();
         mReference.keepSynced(true);
 
-        mEmailEditText=(EditText)findViewById(R.id.email_sign_up);
-        mPasswordEditText=(EditText)findViewById(R.id.password_sign_up);
-        mNameEditText=(EditText)findViewById(R.id.name);
-        mSignUpBtn=(Button)findViewById(R.id.sign_up_btn);
-        mPhoneEditText=(EditText) findViewById(R.id.phone);
-        mAddCv=(Button) findViewById(R.id.upload_file);
+        mEmailEditText = (EditText) findViewById(R.id.email_sign_up);
+        mPasswordEditText = (EditText) findViewById(R.id.password_sign_up);
+        mNameEditText = (EditText) findViewById(R.id.name);
+        mSignUpBtn = (Button) findViewById(R.id.sign_up_btn);
+        mPhoneEditText = (EditText) findViewById(R.id.phone);
+        mAddCv = (Button) findViewById(R.id.upload_file);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-                type=i;
-                if(type==1)
-                {
+                type = i;
+                if (type == 1) {
                     mAddCv.setVisibility(View.VISIBLE);
-                }
-                else
+                } else
                     mAddCv.setVisibility(View.INVISIBLE);
             }
 
@@ -136,39 +132,41 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         });
 
     }
-    private void createAccount(final String name, final String email, String password, final String phone, final int type,final Uri cv) {
 
-            // [START create_user_with_email]
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                writeNewUser(user.getUid(),name,email,phone,type,cv);
-                                 updateUI(user);
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+    private void createAccount(final String name, final String email, String password, final String phone, final int type, final Uri cv) {
 
-
+        // [START create_user_with_email]
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            writeNewUser(user.getUid(), name, email, phone, type, cv);
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(SignUpActivity.this, getString(R.string.auth_failed),
+                                    Toast.LENGTH_SHORT).show();
                         }
-                    });
+
+
+                    }
+                });
 
 
     }
-    private void writeNewUser(String userId, String name, String email,String phone,int type,Uri cv) {
-        User user = new User(name, email,phone,type,cv);
+
+    private void writeNewUser(String userId, String name, String email, String phone, int type, Uri cv) {
+        User user = new User(name, email, phone, type, cv);
 
 
         mReference.child("users").child(userId).setValue(user);
     }
-    void updateUI(FirebaseUser user)
-    {
-        if(user!=null) {
+
+    void updateUI(FirebaseUser user) {
+        if (user != null) {
             mReference = mReference.child("users").child(user.getUid());
             mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -177,12 +175,12 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
                     if (user1 != null) {
                         if (user1.type == 0) {
                             Intent intent = new Intent(SignUpActivity.this, EmployerActivity.class);
-                            intent.putExtra(getString(R.string.user_extra),user1);
+                            intent.putExtra(getString(R.string.user_extra), user1);
 
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(SignUpActivity.this, JopListActivity.class);
-                            intent.putExtra(getString(R.string.user_extra),user1);
+                            intent.putExtra(getString(R.string.user_extra), user1);
                             startActivity(intent);
 
                         }
@@ -197,6 +195,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         }
 
     }
+
     public void performFileSearch() {
 
         // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
@@ -216,6 +215,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         startActivityForResult(intent, READ_REQUEST_CODE);
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
@@ -237,12 +237,12 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
             }
         }
     }
-    void  uploadFile(Uri file)
-    {
+
+    void uploadFile(Uri file) {
         showProgressDialog("Uploading Cv");
 
 
-        StorageReference riversRef = mStorageRef.child("CVs/"+file.getLastPathSegment());
+        StorageReference riversRef = mStorageRef.child("CVs/" + file.getLastPathSegment());
         mUploadTask = riversRef.putFile(file);
 
 // Register observers to listen for when the download is done or if it fails
@@ -256,7 +256,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                mCvLink=downloadUrl;
+                mCvLink = downloadUrl;
                 hideProgressDialog();
             }
         });
@@ -265,29 +265,24 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
 
     @Override
     public void onValidationSucceeded() {
-        Toast.makeText(this, "Yay! we got it right!", Toast.LENGTH_SHORT).show();
-        if(type==1)
-        {
-            if(mCvLink!=null)
-            {createAccount(mNameEditText.getText().toString(),
-                    mEmailEditText.getText().toString(),
-                    mPasswordEditText.getText().toString(),
-                    mPhoneEditText.getText().toString(),type,mCvLink);
+        if (type == 1) {
+            if (mCvLink != null) {
+                createAccount(mNameEditText.getText().toString(),
+                        mEmailEditText.getText().toString(),
+                        mPasswordEditText.getText().toString(),
+                        mPhoneEditText.getText().toString(), type, mCvLink);
 
-            }
-            else
-            {
+            } else {
                 hideProgressDialog();
-                Toast.makeText(getApplicationContext(),"You must upload Your Cv",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.cv_required), Toast.LENGTH_SHORT).show();
 
             }
 
-        }
-        else {
+        } else {
             createAccount(mNameEditText.getText().toString(),
                     mEmailEditText.getText().toString(),
                     mPasswordEditText.getText().toString(),
-                    mPhoneEditText.getText().toString(), type,null);
+                    mPhoneEditText.getText().toString(), type, null);
         }
     }
 
@@ -309,11 +304,10 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case  android.R.id.home:
-                Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 return true;
             default:

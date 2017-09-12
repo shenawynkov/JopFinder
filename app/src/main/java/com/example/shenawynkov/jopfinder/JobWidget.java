@@ -10,7 +10,7 @@ import android.widget.RemoteViews;
  * Created by Shenawynkov on 9/11/2017.
  */
 
-public class JobWidget  extends AppWidgetProvider {
+public class JobWidget extends AppWidgetProvider {
 
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -20,7 +20,6 @@ public class JobWidget  extends AppWidgetProvider {
         // Construct the RemoteViews object
         // Instruct the widget manager to update the widget
     */
-
 
 
     }
@@ -36,9 +35,10 @@ public class JobWidget  extends AppWidgetProvider {
 
             Intent intent = new Intent(context, MyWidgetRemoteViewsService.class);
             views.setRemoteAdapter(R.id.widget_list, intent);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.widget_list);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
             appWidgetManager.updateAppWidget(appWidgetId, views);
-        }}
+        }
+    }
 
     @Override
     public void onEnabled(Context context) {

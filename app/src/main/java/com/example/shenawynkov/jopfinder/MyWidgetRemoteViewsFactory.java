@@ -25,25 +25,26 @@ import java.util.List;
  * Created by Shenawynkov on 9/11/2017.
  */
 
-public class MyWidgetRemoteViewsFactory  implements RemoteViewsService.RemoteViewsFactory {
+public class MyWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     private ChildEventListener mChildEventListener;
-    private List<Job> mJobs=new ArrayList<>();
+    private List<Job> mJobs = new ArrayList<>();
     private Context mContext;
+
     public MyWidgetRemoteViewsFactory(Context applicationContext, Intent intent) {
         mContext = applicationContext;
     }
 
     @Override
     public void onCreate() {
-        mDatabase= FirebaseDatabase.getInstance();
-        mReference=mDatabase.getReference("job");
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference("job");
         mReference.keepSynced(true);
-        mChildEventListener=new ChildEventListener() {
+        mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Job job=  dataSnapshot.getValue(Job.class);
+                Job job = dataSnapshot.getValue(Job.class);
                 mJobs.add(job);
             }
 
@@ -78,8 +79,9 @@ public class MyWidgetRemoteViewsFactory  implements RemoteViewsService.RemoteVie
                 "pref", Context.MODE_PRIVATE);
         String string;
         string = sharedPref.getString("key", "");
-        Type type = new TypeToken<ArrayList<Job>>() {}.getType();
-       mJobs = new Gson().fromJson(string, type);
+        Type type = new TypeToken<ArrayList<Job>>() {
+        }.getType();
+        mJobs = new Gson().fromJson(string, type);
 
 
     }

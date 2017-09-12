@@ -34,15 +34,14 @@ public class EmpolyerJopListFragment extends Fragment {
     private ChildEventListener mChildEventListener;
     private FirebaseAuth mAuth;
     private User mUser;
-    private List<Job> mJobList=new ArrayList();
-
+    private List<Job> mJobList = new ArrayList();
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.employer_jop_list, container, false);
+        View v = inflater.inflate(R.layout.employer_jop_list, container, false);
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.jobs_recycler_view);
 
@@ -66,11 +65,10 @@ public class EmpolyerJopListFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Job job = dataSnapshot.getValue(Job.class);
-                if(job.getEmployeer_mail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()) )
-                {
+                if (job.getEmployeer_mail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
                     mJobAdapter.addJob(job);
 
-                    mJobList=mJobAdapter.getList();
+                    mJobList = mJobAdapter.getList();
                     addPref();
 
                 }
@@ -103,20 +101,17 @@ public class EmpolyerJopListFragment extends Fragment {
     }
 
 
-    void  addPref()
-    {
+    void addPref() {
         Gson gson = new Gson();
         String string = gson.toJson(mJobList);
         SharedPreferences sharedPref = getActivity().getSharedPreferences(
-                "pref" , Context.MODE_PRIVATE);
+                "pref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("key", string);
 
 
         editor.commit();
     }
-
-
 
 
 }

@@ -1,9 +1,6 @@
 package com.example.shenawynkov.jopfinder;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,17 +17,14 @@ import com.example.shenawynkov.jopfinder.model.Job;
 import com.example.shenawynkov.jopfinder.model.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.DecimalMax;
-import com.mobsandgeeks.saripaar.annotation.DecimalMin;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.util.List;
 
-public class NewJopFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener,Validator.ValidationListener {
+public class NewJopFragment extends android.support.v4.app.Fragment implements AdapterView.OnItemSelectedListener, Validator.ValidationListener {
 
 
     @NotEmpty
@@ -41,11 +35,11 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
     private EditText mEditTextMaxSalary;
     private Validator mValidator;
     @NotEmpty
-    @Length(min = 50,max = 2000)
+    @Length(min = 50, max = 2000)
     private EditText mEditTextDesctiption;
     private Button mButton;
 
-  private   String mcareer;
+    private String mcareer;
     private String mTitle;
     private int mMinSalary;
 
@@ -54,8 +48,8 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
     private String mDescription;
 
     private FirebaseDatabase mDatabase;
-    private DatabaseReference myRef ;
-  private User mUser;
+    private DatabaseReference myRef;
+    private User mUser;
     private ChangePagerListner mPagerListner;
 
     @Override
@@ -68,15 +62,15 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_new_jop, container, false);
+        View v = inflater.inflate(R.layout.fragment_new_jop, container, false);
 
 
-        mUser=(User)getActivity().getIntent().getSerializableExtra(getString(R.string.user_extra));
+        mUser = (User) getActivity().getIntent().getSerializableExtra(getString(R.string.user_extra));
 
-        mEditTextTitle=(EditText)v.findViewById(R.id.newjop_title);
-        mEditTextMinSalary=(EditText)v.findViewById(R.id.newjop_min_salary);
-        mEditTextMaxSalary=(EditText)v.findViewById(R.id.newjop_max_salary);
-        mEditTextDesctiption=(EditText)v.findViewById(R.id.newjop_description);
+        mEditTextTitle = (EditText) v.findViewById(R.id.newjop_title);
+        mEditTextMinSalary = (EditText) v.findViewById(R.id.newjop_min_salary);
+        mEditTextMaxSalary = (EditText) v.findViewById(R.id.newjop_max_salary);
+        mEditTextDesctiption = (EditText) v.findViewById(R.id.newjop_description);
         Spinner spinner = (Spinner) v.findViewById(R.id.newjop_spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -88,7 +82,7 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
 
 
         spinner.setOnItemSelectedListener(this);
-        mButton=(Button)v.findViewById(R.id.newjop_add_job);
+        mButton = (Button) v.findViewById(R.id.newjop_add_job);
         mValidator = new Validator(NewJopFragment.this);
         mValidator.setValidationListener(this);
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -119,28 +113,28 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-     mcareer= (String) adapterView.getItemAtPosition(i);
+        mcareer = (String) adapterView.getItemAtPosition(i);
 
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        mcareer= (String) adapterView.getItemAtPosition(0);
+        mcareer = (String) adapterView.getItemAtPosition(0);
     }
 
     @Override
     public void onValidationSucceeded() {
-        mTitle=mEditTextTitle.getText().toString();
-        mMinSalary=Integer.parseInt(mEditTextMinSalary.getText().toString());
-        mMaxSalary=Integer.parseInt(mEditTextMaxSalary.getText().toString());
-        mDescription=mEditTextDesctiption.getText().toString();
+        mTitle = mEditTextTitle.getText().toString();
+        mMinSalary = Integer.parseInt(mEditTextMinSalary.getText().toString());
+        mMaxSalary = Integer.parseInt(mEditTextMaxSalary.getText().toString());
+        mDescription = mEditTextDesctiption.getText().toString();
 
-        mDatabase= FirebaseDatabase.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
 
 
         DatabaseReference myRef = mDatabase.getReference("job");
         myRef.keepSynced(true);
-        Job job=new Job(mTitle,mMinSalary,mMaxSalary,mcareer,mDescription,mUser.email);
+        Job job = new Job(mTitle, mMinSalary, mMaxSalary, mcareer, mDescription, mUser.email);
         myRef.push().setValue(job);
 
 //                Intent  intent=new Intent(getActivity(),EmpolyerJopListFragment.class);
@@ -164,9 +158,7 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
     }
 
 
-
-
-    interface ChangePagerListner{
+    interface ChangePagerListner {
         void ChangePager();
     }
 }
