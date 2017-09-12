@@ -40,8 +40,8 @@ public class EmployerActivity extends AppCompatActivity implements NewJopFragmen
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new NewJopFragment(), "Add Jop");
-        adapter.addFragment(new EmpolyerJopListFragment(), "My Jops");
+        adapter.addFragment(new NewJopFragment(), "Add Job");
+        adapter.addFragment(new EmpolyerJopListFragment(), "My Jobs");
 
         viewPager.setAdapter(adapter);
     }

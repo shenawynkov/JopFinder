@@ -1,5 +1,7 @@
 package com.example.shenawynkov.jopfinder;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +20,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmpolyerJopListFragment extends Fragment {
 
@@ -28,13 +34,14 @@ public class EmpolyerJopListFragment extends Fragment {
     private ChildEventListener mChildEventListener;
     private FirebaseAuth mAuth;
     private User mUser;
+    private List<Job> mJobList = new ArrayList();
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.employer_jop_list, container, false);
+        View v = inflater.inflate(R.layout.employer_jop_list, container, false);
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.jobs_recycler_view);
 
@@ -51,16 +58,18 @@ public class EmpolyerJopListFragment extends Fragment {
         mRecyclerView.setAdapter(mJobAdapter);
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference("job");
+        mReference.keepSynced(true);
+
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 Job job = dataSnapshot.getValue(Job.class);
-
-                if(job.getEmployeer_mail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()) )
-                {
+                if (job.getEmployeer_mail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
                     mJobAdapter.addJob(job);
 
+                    mJobList = mJobAdapter.getList();
+                    addPref();
 
                 }
             }
@@ -92,8 +101,17 @@ public class EmpolyerJopListFragment extends Fragment {
     }
 
 
+    void addPref() {
+        Gson gson = new Gson();
+        String string = gson.toJson(mJobList);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(
+                "pref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("key", string);
 
 
+        editor.commit();
+    }
 
 
 }

@@ -34,9 +34,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     @NotEmpty
     @Email
     private EditText mEmailEditText;
-   // @Password(min = 6, scheme = Password.Scheme.ALPHA_NUMERIC_MIXED_CASE_SYMBOLS)
-   @Password(min = 6)
-   private EditText mPasswordEditText;
+    // @Password(min = 6, scheme = Password.Scheme.ALPHA_NUMERIC_MIXED_CASE_SYMBOLS)
+    @Password(min = 6)
+    private EditText mPasswordEditText;
     private Button mSignInBtn;
     private Button mSignUpBtn;
     private FirebaseAuth mAuth;
@@ -54,11 +54,11 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
 
 
         mAuth = FirebaseAuth.getInstance();
-  mReference=FirebaseDatabase.getInstance().getReference();
-        mEmailEditText=findViewById(R.id.email_sign_in);
-        mPasswordEditText=findViewById(R.id.password);
-        mSignInBtn=(Button)findViewById(R.id.sign_in_btn);
-         mSignUpBtn=(Button)findViewById(R.id.sign_up);
+        mReference = FirebaseDatabase.getInstance().getReference();
+        mEmailEditText = findViewById(R.id.email_sign_in);
+        mPasswordEditText = findViewById(R.id.password);
+        mSignInBtn = (Button) findViewById(R.id.sign_in_btn);
+        mSignUpBtn = (Button) findViewById(R.id.sign_up);
 
         mSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,14 +66,12 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 mValidator.validate();
 
 
-
-
             }
         });
         mSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(LoginActivity.this,SignUpActivity.class);
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
 
             }
@@ -87,13 +85,12 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser!=null) {
+        if (currentUser != null) {
             showProgressDialog();
 
             updateUI(currentUser);
-        }
-        else{
-                hideProgressDialog();
+        } else {
+            hideProgressDialog();
 
         }
 
@@ -112,13 +109,13 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                             FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
 
                         } else {
                             // If sign in fails, display a message to the user.
                             hideProgressDialog();
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, getString(R.string.auth_failed),
                                     Toast.LENGTH_SHORT).show();
 
                         }
@@ -128,10 +125,12 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                 });
         // [END sign_in_with_email]
     }
-    void updateUI(FirebaseUser user)
-    {
-        if(user!=null) {
+
+    void updateUI(FirebaseUser user) {
+        if (user != null) {
             mReference = mReference.child("users").child(user.getUid());
+            mReference.keepSynced(true);
+
             mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -139,12 +138,12 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
                     if (user1 != null) {
                         if (user1.type == 0) {
                             Intent intent = new Intent(LoginActivity.this, EmployerActivity.class);
-                            intent.putExtra(getString(R.string.user_extra),user1);
+                            intent.putExtra(getString(R.string.user_extra), user1);
 
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(LoginActivity.this, JopListActivity.class);
-                            intent.putExtra(getString(R.string.user_extra),user1);
+                            intent.putExtra(getString(R.string.user_extra), user1);
                             startActivity(intent);
 
                         }
@@ -162,13 +161,9 @@ public class LoginActivity extends BaseActivity implements Validator.ValidationL
     }
 
 
-
-
-
-
     @Override
     public void onValidationSucceeded() {
-        signIn(mEmailEditText.getText().toString(),mPasswordEditText.getText().toString());
+        signIn(mEmailEditText.getText().toString(), mPasswordEditText.getText().toString());
 
     }
 

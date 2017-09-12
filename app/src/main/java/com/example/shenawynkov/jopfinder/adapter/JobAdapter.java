@@ -141,6 +141,10 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ViewHolder> {
             return null;
         }
     }
+    public  List<Job>  getList()
+    {
+        return mJobList;
+    }
 }
 
 
