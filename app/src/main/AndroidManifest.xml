@@ -19,6 +19,7 @@
         <activity
             android:name=".LoginActivity"
             android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -36,7 +37,7 @@
 
         <activity
             android:name=".EmployerActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize|stateHidden">
 
         </activity>
 

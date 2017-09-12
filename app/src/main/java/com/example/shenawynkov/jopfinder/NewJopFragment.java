@@ -35,7 +35,7 @@ public class NewJopFragment extends android.support.v4.app.Fragment implements A
     private EditText mEditTextMaxSalary;
     private Validator mValidator;
     @NotEmpty
-    @Length(min = 50, max = 2000)
+    @Length(min = 50, max = 2000,message = "Min Length is 50 , Max is 2000")
     private EditText mEditTextDesctiption;
     private Button mButton;
 
