@@ -34,28 +34,37 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Digits;
 import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Or;
+import com.mobsandgeeks.saripaar.annotation.Order;
 import com.mobsandgeeks.saripaar.annotation.Password;
 
+import java.io.File;
 import java.util.List;
 
 public class SignUpActivity extends BaseActivity implements Validator.ValidationListener {
     private static final int READ_REQUEST_CODE = 42;
     @NotEmpty
     @Email
+    @Order(2)
     private EditText mEmailEditText;
     @Password(min = 6)
+    @Order(3)
     private EditText mPasswordEditText;
     @NotEmpty
+    @Length (min = 6,message = "Min Length is 6")
+    @Order(1)
     private EditText mNameEditText;
     private Button mSignUpBtn;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
     @NotEmpty
+    @Order(4)
     private EditText mPhoneEditText;
-    private Button mAddCv;
     private int type;
     private UploadTask mUploadTask;
     private FirebaseStorage mStorage;
@@ -97,16 +106,16 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         mNameEditText = (EditText) findViewById(R.id.name);
         mSignUpBtn = (Button) findViewById(R.id.sign_up_btn);
         mPhoneEditText = (EditText) findViewById(R.id.phone);
-        mAddCv = (Button) findViewById(R.id.upload_file);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 type = i;
                 if (type == 1) {
-                    mAddCv.setVisibility(View.VISIBLE);
+                    mSignUpBtn.setText(getString(R.string.sign_up_with_cv));
                 } else
-                    mAddCv.setVisibility(View.INVISIBLE);
+                    mSignUpBtn.setText(getString(R.string.sign_up));
+
             }
 
             @Override
@@ -117,19 +126,12 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         mSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgressDialog();
                 mValidator.validate();
 
 
             }
         });
-        mAddCv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                performFileSearch();
 
-            }
-        });
 
     }
 
@@ -197,7 +199,6 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
     }
 
     public void performFileSearch() {
-
         // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
         // browser.
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -232,6 +233,7 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
+
                 uploadFile(uri);
 
             }
@@ -242,43 +244,53 @@ public class SignUpActivity extends BaseActivity implements Validator.Validation
         showProgressDialog("Uploading Cv");
 
 
-        StorageReference riversRef = mStorageRef.child("CVs/" + file.getLastPathSegment());
-        mUploadTask = riversRef.putFile(file);
+
+
+            StorageReference riversRef = mStorageRef.child("CVs").child(mNameEditText.getText().toString()+".pdf");
+            mUploadTask = riversRef.putFile(file);
 
 // Register observers to listen for when the download is done or if it fails
-        mUploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                mCvLink = downloadUrl;
-                hideProgressDialog();
-            }
-        });
+            mUploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    Toast.makeText(getApplicationContext(),"Upload Again",Toast.LENGTH_SHORT).show();
+                    hideProgressDialog();
+
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    mCvLink = downloadUrl;
+                    if (mCvLink != null) {
+                        createAccount(mNameEditText.getText().toString(),
+                                mEmailEditText.getText().toString(),
+                                mPasswordEditText.getText().toString(),
+                                mPhoneEditText.getText().toString(), type, mCvLink);
+
+                    }
+                    else {
+                        hideProgressDialog();
+                        Toast.makeText(getApplicationContext(), getString(R.string.cv_required), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
+
 
     }
 
     @Override
     public void onValidationSucceeded() {
         if (type == 1) {
-            if (mCvLink != null) {
-                createAccount(mNameEditText.getText().toString(),
-                        mEmailEditText.getText().toString(),
-                        mPasswordEditText.getText().toString(),
-                        mPhoneEditText.getText().toString(), type, mCvLink);
+            performFileSearch();
 
-            } else {
-                hideProgressDialog();
-                Toast.makeText(getApplicationContext(), getString(R.string.cv_required), Toast.LENGTH_SHORT).show();
-
-            }
 
         } else {
+
+
             createAccount(mNameEditText.getText().toString(),
                     mEmailEditText.getText().toString(),
                     mPasswordEditText.getText().toString(),
